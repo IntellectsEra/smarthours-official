@@ -50,7 +50,7 @@ export type Testimonial = {
 };
 
 export type CourseData = {
-  status: "active" | "inactive";
+  status?: "active" | "inactive";
   slug: string;
   courseTitle: string;
   courseBanner: string;
