@@ -1,71 +1,109 @@
-'use client';
+"use client";
 
-import { ArrowUpRight, Book, CalendarClock } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-export default function CourseCard({
-  title,
-  duration,
-  classes,
-  image,
-}: {
-  title: string;
-  classes?: string;
-  duration: string;
-  image: string;
-}) {
-  const [isHovered, setIsHovered] = useState(false);
+import { ArrowUpRight, CalendarClock, Award, MonitorPlay } from "lucide-react";
+
+import { CourseData } from "@/types/course";
+
+export default function CourseCard({ course }: { course: CourseData }) {
+  const active = course.status === "active";
 
   return (
     <motion.article
-      role='button'
-      tabIndex={0}
-      aria-label='Full Stack Web Development course card'
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.01, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-      className='group border border-b-gray-300 p-4 rounded-md flex flex-col gap-4 cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-400'
+      whileHover={{
+        y: -8,
+      }}
+      transition={{
+        duration: 0.25,
+      }}
+      className={`group overflow-hidden rounded-2xl border bg-white transition-all
+
+      ${
+        active
+          ? "border-blue-200 hover:border-blue-500 hover:shadow-xl"
+          : "border-slate-200 opacity-90 hover:opacity-100"
+      }
+      `}
     >
-      {/* Course Image */}
-      <div
-        className='w-full h-48 lg:h-64 rounded-md'
-        aria-label='Course preview image placeholder'
-      >
-        <img
-          src={image}
-          alt={`${title} course preview image`}
-          className='w-full h-full object-cover rounded-md'
+      {/* Image */}
+
+      <div className="relative h-60 overflow-hidden">
+        <Image
+          src={course.courseBanner}
+          alt={course.courseTitle}
+          fill
+          className={`object-cover transition duration-500 group-hover:scale-105
+
+          ${active ? "" : "brightness-90 grayscale-[20%]"}
+          `}
         />
+
+        {/* Badge */}
+
+        <div
+          className={`absolute top-4 left-4 rounded-full px-4 py-1 text-xs font-semibold
+
+          ${active ? "bg-green-500 text-white" : "bg-violet-600 text-white"}
+          `}
+        >
+          {active ? "Enrollment Open" : "Registration Closed"}
+        </div>
       </div>
 
-      {/* Course Info */}
-      <div className='flex flex-col gap-2'>
-        <div className='flex items-center justify-between gap-2'>
-          <div className='flex items-center gap-2'>
-            <h2 className='text-lg font-semibold text-gray-900'>{title}</h2>
-            {/* <span
-              className='text-sm font-normal text-gray-500 px-2 py-1 border border-b-gray-300 rounded-[0.3rem] flex items-center gap-1'
-              aria-label='hours total duration'
-            >
-              <CalendarClock className='w-4 h-4' aria-hidden='true' />
-              {duration}
-            </span> */}
+      {/* Body */}
+
+      <div className="p-5 space-y-5">
+        <h3 className="text-xl font-bold leading-snug text-gray-900">
+          {course.courseTitle}
+        </h3>
+
+        <div className="grid grid-cols-3 gap-2 text-sm text-gray-600">
+          <div className="flex flex-col items-center gap-1 rounded-lg bg-slate-50 py-3">
+            <CalendarClock size={18} />
+
+            <span>{course.hero.info.duration}</span>
           </div>
 
-          <div className='flex'>
-            <div className='text-white bg-[#2568FF] w-10 h-10 rounded-full flex items-center justify-center'>
-              <motion.div
-                animate={isHovered ? { rotate: 45 } : { rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className='origin-center'
-              >
-                <ArrowUpRight className='w-6 h-6' />
-              </motion.div>
-            </div>
+          <div className="flex flex-col items-center gap-1 rounded-lg bg-slate-50 py-3">
+            <Award size={18} />
+
+            <span>Certificate</span>
           </div>
+
+          <div className="flex flex-col items-center gap-1 rounded-lg bg-slate-50 py-3">
+            <MonitorPlay size={18} />
+
+            <span>Online</span>
+          </div>
+        </div>
+
+        <p className="text-sm text-gray-500 line-clamp-3">
+          {course.hero.description}
+        </p>
+
+        <div className="flex items-center justify-between">
+          <span
+            className={`font-semibold
+
+            ${active ? "text-blue-600" : "text-violet-600"}
+            `}
+          >
+            {active ? "Explore Program" : "Registration will open soon"}
+          </span>
+
+          <motion.div
+            whileHover={{
+              rotate: 45,
+            }}
+            className={`flex h-11 w-11 items-center justify-center rounded-full text-white
+
+            ${active ? "bg-blue-600" : "bg-violet-600"}
+            `}
+          >
+            <ArrowUpRight size={20} />
+          </motion.div>
         </div>
       </div>
     </motion.article>

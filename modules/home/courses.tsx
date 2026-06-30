@@ -1,104 +1,177 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, Lock, Rocket } from "lucide-react";
 
-import { ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import Link from 'next/link';
-import SectionTitlebar from '@/common/section-titlebar';
-import CourseCard from '@/common/course-card';
-import { CourseData } from '@/types/course';
-import { courses } from '@/data/program';
+import SectionTitlebar from "@/common/section-titlebar";
+import CourseCard from "@/common/course-card";
+
+import { courses } from "@/data/program";
+import { CourseData } from "@/types/course";
 
 export default function Courses() {
-  const headingId = 'explore-courses-title';
+  const headingId = "explore-courses-title";
 
-  // Variants
+  const activeCourses = courses.filter((course) => course.status === "active");
+
+  const inactiveCourses = courses.filter(
+    (course) => course.status === "inactive",
+  );
+
   const containerVariants = {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
       },
     },
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95, y: 40 },
-    visible: { opacity: 1, scale: 1, y: 0 },
+    hidden: {
+      opacity: 0,
+      y: 30,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
   };
 
   return (
     <section
-      id='explore-courses'
-      className='py-8 sm:py-10 md:py-12 lg:py-16'
-      role='region'
+      id="explore-courses"
+      className="py-12 lg:py-16"
       aria-labelledby={headingId}
     >
-      <div className='mx-auto max-w-7xl px-6 lg:flex lg:px-8 '>
-        <div className='flex flex-col gap-8'>
-          {/* Header row */}
-          <motion.div
-            className='flex items-end justify-between gap-2'
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+
+        <div className="flex flex-col gap-8">
+          <div className="flex items-end justify-between">
             <SectionTitlebar
-              title='Explore Our Programs'
-              description='Discover expert-led, career-focused programs designed to boost your skills.'
-              align='left'
+              title="Explore Our Programs"
+              description="Industry-ready programs designed to accelerate your career."
+              align="left"
             />
 
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <Link href='/enroll'>
-                <Button
-                  className='hidden md:flex'
-                  size='lg'
-                  aria-label='Enroll in a course'
-                  title='Enroll in a course'
-                >
-                  Enroll Now <ArrowRight aria-hidden='true' />
-                </Button>
-              </Link>
-            </motion.div>
-          </motion.div>
+            <Link href="/enroll">
+              <Button className="hidden md:flex">
+                Enroll Now
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
 
-          {/* Course Grid */}
-          <motion.div
-            className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'
-            role='list'
-            aria-label='List of available courses'
-            variants={containerVariants}
-            initial='hidden'
-            whileInView='visible'
-            viewport={{ once: true, amount: 0.3 }}
-          >
-            {courses?.map((course: CourseData, i: number) => {
-              return (
-                <motion.div key={i + 1} variants={cardVariants}>
-                  <Link
-                    href={{
-                      pathname: `/program/${course.slug}`,
-                    }}
-                    target='_blank'
-                  >
-                    <CourseCard
-                      title={course?.courseTitle}
-                      duration={course?.hero?.info?.duration}
-                      image={course?.courseBanner}
-                    />
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+          <Tabs defaultValue="active" className="w-full">
+            <div className="flex mb-2">
+              <TabsList
+                className="
+      h-16!
+      rounded-full
+      bg-white/80
+      backdrop-blur-xl
+      border
+      border-gray-200
+      shadow-lg
+      p-2
+      gap-2
+    "
+              >
+                <TabsTrigger
+                  value="active"
+                  className="
+        rounded-full
+        px-8
+        h-12
+        text-base
+        font-semibold
+        transition-all
+        duration-300
+        data-[state=active]:bg-gradient-to-r
+        data-[state=active]:from-blue-600
+        data-[state=active]:to-indigo-600
+        data-[state=active]:text-white
+        data-[state=active]:shadow-lg
+        hover:bg-gray-100
+      "
+                >
+                  <Rocket className="mr-2 h-5 w-5" />
+                  Live Programs
+                  <span className="ml-2 rounded-full bg-white/20 px-2 py-0.5 text-sm">
+                    {activeCourses.length}
+                  </span>
+                </TabsTrigger>
+
+                <TabsTrigger
+                  value="inactive"
+                  className="
+        rounded-full
+        px-8
+        h-12
+        text-base
+        font-semibold
+        transition-all
+        duration-300
+        data-[state=active]:bg-gradient-to-r
+        data-[state=active]:from-red-500
+        data-[state=active]:to-orange-500
+        data-[state=active]:text-white
+        data-[state=active]:shadow-lg
+        hover:bg-gray-100
+      "
+                >
+                  <Lock className="mr-2 h-5 w-5" />
+                  Registration Closed
+                  <span className="ml-2 rounded-full bg-white/20 px-2 py-0.5 text-sm">
+                    {inactiveCourses.length}
+                  </span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* ACTIVE */}
+
+            <TabsContent value="active">
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+              >
+                {activeCourses.map((course: CourseData) => (
+                  <motion.div key={course.slug} variants={cardVariants}>
+                    <Link href={`/program/${course.slug}`}>
+                      <CourseCard course={course} />
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </TabsContent>
+
+            {/* COMING SOON */}
+
+            <TabsContent value="inactive">
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+              >
+                {inactiveCourses.map((course: CourseData) => (
+                  <motion.div key={course.slug} variants={cardVariants}>
+                    <CourseCard course={course} />
+                  </motion.div>
+                ))}
+              </motion.div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </section>
