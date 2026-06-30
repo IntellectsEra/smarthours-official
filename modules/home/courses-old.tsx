@@ -1,18 +1,18 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 
-import { ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+// import { ArrowRight } from 'lucide-react';
+// import { motion } from 'framer-motion';
 
-import Link from 'next/link';
-import SectionTitlebar from '@/common/section-titlebar';
-import CourseCard from '@/common/course-card';
+// import Link from 'next/link';
+// import SectionTitlebar from '@/common/section-titlebar';
+// import CourseCard from '@/common/course-card';
 
 export default function Courses() {
   const headingId = 'explore-courses-title';
 
-  // Variants
+
   const containerVariants = {
     hidden: {},
     visible: {
@@ -34,9 +34,9 @@ export default function Courses() {
       role='region'
       aria-labelledby={headingId}
     >
-      <div className='mx-auto max-w-7xl px-6 lg:flex lg:px-8 '>
+      {/* <div className='mx-auto max-w-7xl px-6 lg:flex lg:px-8 '>
         <div className='flex flex-col gap-8'>
-          {/* Header row */}
+         
           <motion.div
             className='flex items-end justify-between gap-2'
             initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ export default function Courses() {
             </motion.div>
           </motion.div>
 
-          {/* Course Grid */}
+         
           <motion.div
             className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'
             role='list'
@@ -104,7 +104,7 @@ export default function Courses() {
             </motion.div>
           </motion.div>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }
